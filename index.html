@@ -1,115 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FangDootle Browser</title>
-    <style>
-        /* Reset & basic styles */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f4f4f9;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        header {
-            background-color: #4a90e2;
-            padding: 20px;
-            color: white;
-            text-align: center;
-            font-size: 1.8rem;
-            font-weight: bold;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .search-bar {
-            display: flex;
-            margin: 20px auto;
-            max-width: 600px;
-            width: 90%;
-        }
-
-        .search-bar input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 5px 0 0 5px;
-            font-size: 1rem;
-            outline: none;
-            transition: border 0.2s;
-        }
-
-        .search-bar input:focus {
-            border-color: #4a90e2;
-        }
-
-        .search-bar button {
-            padding: 12px 20px;
-            border: none;
-            background-color: #4a90e2;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 0 5px 5px 0;
-            transition: background-color 0.2s;
-        }
-
-        .search-bar button:hover {
-            background-color: #357ABD;
-        }
-
-        iframe {
-            flex: 1;
-            width: 100%;
-            border: none;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            font-size: 0.9rem;
-            background-color: #eee;
-            color: #555;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FangDootle Browser</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        background-color: #f4f4f9;
+    }
+    header {
+        background-color: #4a90e2;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+    .toolbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 10px auto;
+        max-width: 700px;
+        width: 90%;
+        gap: 5px;
+    }
+    .toolbar button {
+        padding: 10px 15px;
+        border: none;
+        background-color: #4a90e2;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 0.9rem;
+        transition: background-color 0.2s;
+    }
+    .toolbar button:hover {
+        background-color: #357ABD;
+    }
+    .search-bar {
+        display: flex;
+        margin: 10px auto;
+        max-width: 600px;
+        width: 90%;
+    }
+    .search-bar input {
+        flex: 1;
+        padding: 10px 12px;
+        border: 2px solid #ddd;
+        border-radius: 5px 0 0 5px;
+        font-size: 1rem;
+        outline: none;
+        transition: border 0.2s;
+    }
+    .search-bar input:focus {
+        border-color: #4a90e2;
+    }
+    .search-bar button {
+        padding: 10px 15px;
+        border: none;
+        background-color: #4a90e2;
+        color: white;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 0 5px 5px 0;
+        transition: background-color 0.2s;
+    }
+    .search-bar button:hover {
+        background-color: #357ABD;
+    }
+    #browserFrame {
+        flex: 1;
+        width: 100%;
+        border: none;
+    }
+    footer {
+        text-align: center;
+        padding: 8px;
+        font-size: 0.85rem;
+        background-color: #eee;
+        color: #555;
+    }
+</style>
 </head>
 <body>
-    <header>FangDootle Browser</header>
+<header>FangDootle Browser</header>
 
-    <div class="search-bar">
-        <input type="text" id="searchInput" placeholder="Search Google...">
-        <button id="searchBtn">Search</button>
-    </div>
+<div class="toolbar">
+    <button id="backBtn">⬅ Back</button>
+    <button id="forwardBtn">➡ Forward</button>
+    <button id="reloadBtn">⟳ Reload</button>
+</div>
 
-    <iframe id="browserFrame" src="https://www.google.com"></iframe>
+<div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Search Google...">
+    <button id="searchBtn">Search</button>
+</div>
 
-    <footer>© 2025 FangDootle Browser</footer>
+<iframe id="browserFrame" src="https://www.google.com"></iframe>
 
-    <script>
-        const searchBtn = document.getElementById('searchBtn');
-        const searchInput = document.getElementById('searchInput');
-        const browserFrame = document.getElementById('browserFrame');
+<footer>© 2025 FangDootle Browser</footer>
 
-        // Search button click
-        searchBtn.addEventListener('click', () => {
-            const query = searchInput.value.trim();
-            if (query) {
-                browserFrame.src = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-            }
-        });
+<script>
+    const browserFrame = document.getElementById('browserFrame');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchInput = document.getElementById('searchInput');
+    const backBtn = document.getElementById('backBtn');
+    const forwardBtn = document.getElementById('forwardBtn');
+    const reloadBtn = document.getElementById('reloadBtn');
 
-        // Press Enter to search
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') searchBtn.click();
-        });
-    </script>
+    let historyStack = ['https://www.google.com'];
+    let historyIndex = 0;
+
+    // Load URL in iframe and update history
+    function navigate(url) {
+        browserFrame.src = url;
+        // Update history if it's a new navigation
+        if (historyStack[historyIndex] !== url) {
+            historyStack = historyStack.slice(0, historyIndex + 1);
+            historyStack.push(url);
+            historyIndex++;
+        }
+        updateButtons();
+    }
+
+    function updateButtons() {
+        backBtn.disabled = historyIndex <= 0;
+        forwardBtn.disabled = historyIndex >= historyStack.length - 1;
+    }
+
+    // Search button
+    searchBtn.addEventListener('click', () => {
+        const query = searchInput.value.trim();
+        if (query) {
+            navigate(`https://www.google.com/search?q=${encodeURIComponent(query)}`);
+        }
+    });
+
+    // Press Enter to search
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') searchBtn.click();
+    });
+
+    // Toolbar buttons
+    backBtn.addEventListener('click', () => {
+        if (historyIndex > 0) {
+            historyIndex--;
+            browserFrame.src = historyStack[historyIndex];
+            updateButtons();
+        }
+    });
+
+    forwardBtn.addEventListener('click', () => {
+        if (historyIndex < historyStack.length - 1) {
+            historyIndex++;
+            browserFrame.src = historyStack[historyIndex];
+            updateButtons();
+        }
+    });
+
+    reloadBtn.addEventListener('click', () => {
+        browserFrame.src = historyStack[historyIndex];
+    });
+
+    updateButtons();
+</script>
 </body>
 </html>
