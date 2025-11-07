@@ -5,23 +5,58 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FangDootle Browser</title>
 <style>
-  body { margin: 0; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
-  header { background: #4a90e2; color: white; text-align: center; padding: 15px; font-size: 1.5rem; }
-  .search-bar { display: flex; margin: 10px auto; max-width: 600px; width: 90%; }
-  .search-bar input { flex: 1; padding: 10px; font-size: 1rem; border: 2px solid #ddd; border-radius: 5px 0 0 5px; }
-  .search-bar button { padding: 10px; font-size: 1rem; border: none; background: #4a90e2; color: white; border-radius: 0 5px 5px 0; cursor: pointer; }
-  iframe { flex: 1; width: 100%; border: none; }
+  body {
+    margin: 0;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  header {
+    background: #4a90e2;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.5rem;
+  }
+  .search-bar {
+    display: flex;
+    margin: 10px auto;
+    max-width: 600px;
+    width: 90%;
+  }
+  .search-bar input {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 5px 0 0 5px;
+  }
+  .search-bar button {
+    padding: 10px;
+    font-size: 1rem;
+    border: none;
+    background: #4a90e2;
+    color: white;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+  }
+  iframe {
+    flex: 1;
+    width: 100%;
+    border: none;
+  }
 </style>
 </head>
 <body>
 <header>FangDootle Browser</header>
 
 <div class="search-bar">
-  <input type="text" id="searchInput" placeholder="Search Google...">
+  <input type="text" id="searchInput" placeholder="Search DuckDuckGo...">
   <button id="searchBtn">Search</button>
 </div>
 
-<iframe id="browserFrame" src="https://www.google.com/search?q=example"></iframe>
+<iframe id="browserFrame" src="https://duckduckgo.com/?q=example"></iframe>
 
 <script>
 const searchInput = document.getElementById('searchInput');
@@ -30,17 +65,14 @@ const browserFrame = document.getElementById('browserFrame');
 
 function updateSearch() {
   const query = encodeURIComponent(searchInput.value.trim());
-  if (query) {
-    // Construct Google search URL dynamically
-    const baseUrl = "https://www.google.com/search?q=example";
-    const newUrl = baseUrl.replace("example", query);
-    browserFrame.src = newUrl;
+  if(query) {
+    browserFrame.src = `https://duckduckgo.com/?q=${query}`;
   }
 }
 
 searchBtn.addEventListener('click', updateSearch);
 searchInput.addEventListener('keypress', e => {
-  if (e.key === 'Enter') updateSearch();
+  if(e.key === 'Enter') updateSearch();
 });
 </script>
 </body>
