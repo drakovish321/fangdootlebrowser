@@ -21,25 +21,26 @@
   <button id="searchBtn">Search</button>
 </div>
 
-<iframe id="browserFrame" src="https://www.google.com/search?q=example&oq=ex&gs_lcrp=EgZjaHJvbWUqBggAEEUYOzIGCAAQRRg7MhAIARAuGMcBGLEDGNEDGIAEMhAIAhAuGMcBGLEDGNEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgYIBBBFGDsyBggFEEUYOTINCAYQABiDARixAxiABDIQCAcQLhjHARixAxjRAxiABDIKCAgQABixAxiABNIBBzcyNmowajeoAgCwAgA&sourceid=chrome&ie=UTF-8&safe=active&ssui=on"></iframe>
+<iframe id="browserFrame" src="https://www.google.com/search?q=example"></iframe>
 
 <script>
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 const browserFrame = document.getElementById('browserFrame');
 
-searchBtn.addEventListener('click', () => {
+function updateSearch() {
   const query = encodeURIComponent(searchInput.value.trim());
-  if(query) {
-    const baseUrl = "https://www.google.com/search?q=example&oq=ex&gs_lcrp=EgZjaHJvbWUqBggAEEUYOzIGCAAQRRg7MhAIARAuGMcBGLEDGNEDGIAEMhAIAhAuGMcBGLEDGNEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgYIBBBFGDsyBggFEEUYOTINCAYQABiDARixAxiABDIQCAcQLhjHARixAxjRAxiABDIKCAgQABixAxiABNIBBzcyNmowajeoAgCwAgA&sourceid=chrome&ie=UTF-8&safe=active&ssui=on";
-    // replace 'example' with user query
-    const newUrl = baseUrl.replace('example', query);
+  if (query) {
+    // Construct Google search URL dynamically
+    const baseUrl = "https://www.google.com/search?q=example";
+    const newUrl = baseUrl.replace("example", query);
     browserFrame.src = newUrl;
   }
-});
+}
 
+searchBtn.addEventListener('click', updateSearch);
 searchInput.addEventListener('keypress', e => {
-  if(e.key === 'Enter') searchBtn.click();
+  if (e.key === 'Enter') updateSearch();
 });
 </script>
 </body>
