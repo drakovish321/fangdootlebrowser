@@ -5,170 +5,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FangDootle Browser</title>
 <style>
-    body {
-        font-family: 'Segoe UI', sans-serif;
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-        background-color: #f4f4f9;
-    }
-    header {
-        background-color: #4a90e2;
-        color: white;
-        padding: 20px;
-        text-align: center;
-        font-size: 1.8rem;
-        font-weight: bold;
-    }
-    .toolbar {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 10px auto;
-        max-width: 700px;
-        width: 90%;
-        gap: 5px;
-    }
-    .toolbar button {
-        padding: 10px 15px;
-        border: none;
-        background-color: #4a90e2;
-        color: white;
-        cursor: pointer;
-        border-radius: 5px;
-        font-size: 0.9rem;
-        transition: background-color 0.2s;
-    }
-    .toolbar button:hover {
-        background-color: #357ABD;
-    }
-    .search-bar {
-        display: flex;
-        margin: 10px auto;
-        max-width: 600px;
-        width: 90%;
-    }
-    .search-bar input {
-        flex: 1;
-        padding: 10px 12px;
-        border: 2px solid #ddd;
-        border-radius: 5px 0 0 5px;
-        font-size: 1rem;
-        outline: none;
-        transition: border 0.2s;
-    }
-    .search-bar input:focus {
-        border-color: #4a90e2;
-    }
-    .search-bar button {
-        padding: 10px 15px;
-        border: none;
-        background-color: #4a90e2;
-        color: white;
-        font-size: 1rem;
-        cursor: pointer;
-        border-radius: 0 5px 5px 0;
-        transition: background-color 0.2s;
-    }
-    .search-bar button:hover {
-        background-color: #357ABD;
-    }
-    #browserFrame {
-        flex: 1;
-        width: 100%;
-        border: none;
-    }
-    footer {
-        text-align: center;
-        padding: 8px;
-        font-size: 0.85rem;
-        background-color: #eee;
-        color: #555;
-    }
+  body { margin: 0; font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; }
+  header { background: #4a90e2; color: white; text-align: center; padding: 15px; font-size: 1.5rem; }
+  .search-bar { display: flex; margin: 10px auto; max-width: 600px; width: 90%; }
+  .search-bar input { flex: 1; padding: 10px; font-size: 1rem; border: 2px solid #ddd; border-radius: 5px 0 0 5px; }
+  .search-bar button { padding: 10px; font-size: 1rem; border: none; background: #4a90e2; color: white; border-radius: 0 5px 5px 0; cursor: pointer; }
+  iframe { flex: 1; width: 100%; border: none; }
 </style>
 </head>
 <body>
 <header>FangDootle Browser</header>
 
-<div class="toolbar">
-    <button id="backBtn">⬅ Back</button>
-    <button id="forwardBtn">➡ Forward</button>
-    <button id="reloadBtn">⟳ Reload</button>
-</div>
-
 <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="Search Google...">
-    <button id="searchBtn">Search</button>
+  <input type="text" id="searchInput" placeholder="Search Google...">
+  <button id="searchBtn">Search</button>
 </div>
 
-<iframe id="browserFrame" src="https://www.google.com"></iframe>
-
-<footer>© 2025 FangDootle Browser</footer>
+<iframe id="browserFrame" src="https://www.google.com/search?q=example&oq=ex&gs_lcrp=EgZjaHJvbWUqBggAEEUYOzIGCAAQRRg7MhAIARAuGMcBGLEDGNEDGIAEMhAIAhAuGMcBGLEDGNEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgYIBBBFGDsyBggFEEUYOTINCAYQABiDARixAxiABDIQCAcQLhjHARixAxjRAxiABDIKCAgQABixAxiABNIBBzcyNmowajeoAgCwAgA&sourceid=chrome&ie=UTF-8&safe=active&ssui=on"></iframe>
 
 <script>
-    const browserFrame = document.getElementById('browserFrame');
-    const searchBtn = document.getElementById('searchBtn');
-    const searchInput = document.getElementById('searchInput');
-    const backBtn = document.getElementById('backBtn');
-    const forwardBtn = document.getElementById('forwardBtn');
-    const reloadBtn = document.getElementById('reloadBtn');
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const browserFrame = document.getElementById('browserFrame');
 
-    let historyStack = ['https://www.google.com'];
-    let historyIndex = 0;
+searchBtn.addEventListener('click', () => {
+  const query = encodeURIComponent(searchInput.value.trim());
+  if(query) {
+    const baseUrl = "https://www.google.com/search?q=example&oq=ex&gs_lcrp=EgZjaHJvbWUqBggAEEUYOzIGCAAQRRg7MhAIARAuGMcBGLEDGNEDGIAEMhAIAhAuGMcBGLEDGNEDGIAEMhMIAxAuGIMBGMcBGLEDGNEDGIAEMgYIBBBFGDsyBggFEEUYOTINCAYQABiDARixAxiABDIQCAcQLhjHARixAxjRAxiABDIKCAgQABixAxiABNIBBzcyNmowajeoAgCwAgA&sourceid=chrome&ie=UTF-8&safe=active&ssui=on";
+    // replace 'example' with user query
+    const newUrl = baseUrl.replace('example', query);
+    browserFrame.src = newUrl;
+  }
+});
 
-    // Load URL in iframe and update history
-    function navigate(url) {
-        browserFrame.src = url;
-        // Update history if it's a new navigation
-        if (historyStack[historyIndex] !== url) {
-            historyStack = historyStack.slice(0, historyIndex + 1);
-            historyStack.push(url);
-            historyIndex++;
-        }
-        updateButtons();
-    }
-
-    function updateButtons() {
-        backBtn.disabled = historyIndex <= 0;
-        forwardBtn.disabled = historyIndex >= historyStack.length - 1;
-    }
-
-    // Search button
-    searchBtn.addEventListener('click', () => {
-        const query = searchInput.value.trim();
-        if (query) {
-            navigate(`https://www.google.com/search?q=${encodeURIComponent(query)}`);
-        }
-    });
-
-    // Press Enter to search
-    searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') searchBtn.click();
-    });
-
-    // Toolbar buttons
-    backBtn.addEventListener('click', () => {
-        if (historyIndex > 0) {
-            historyIndex--;
-            browserFrame.src = historyStack[historyIndex];
-            updateButtons();
-        }
-    });
-
-    forwardBtn.addEventListener('click', () => {
-        if (historyIndex < historyStack.length - 1) {
-            historyIndex++;
-            browserFrame.src = historyStack[historyIndex];
-            updateButtons();
-        }
-    });
-
-    reloadBtn.addEventListener('click', () => {
-        browserFrame.src = historyStack[historyIndex];
-    });
-
-    updateButtons();
+searchInput.addEventListener('keypress', e => {
+  if(e.key === 'Enter') searchBtn.click();
+});
 </script>
 </body>
 </html>
