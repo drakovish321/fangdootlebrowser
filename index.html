@@ -102,7 +102,6 @@
     font-size: 0.9rem;
   }
 
-  /* Iframe Styling */
   #urlFrameContainer {
     margin: 2rem auto;
     max-width: 800px;
@@ -121,7 +120,6 @@
     border-radius: 16px;
   }
 
-  /* Google Results Styling */
   .gcse-searchresults-only {
     margin: 2rem auto;
     max-width: 800px;
@@ -213,30 +211,28 @@ function isValidURL(str) {
 
 function handleInput(query) {
   if (isValidURL(query)) {
-    // Handle URL input
     const url = query.includes('://') ? query : `http://${query}`;
     iframeContainer.style.display = 'block';
     searchResults.style.display = 'none';
     urlFrame.src = url;
 
-    // Detect if the iframe was blocked (X-Frame-Options / CSP)
-    urlFrame.onload = () => {
+    // Detect if iframe blocked after timeout
+    let blockedCheck = setTimeout(() => {
+      // If the iframe has no content or throws error
       try {
         const doc = urlFrame.contentDocument || urlFrame.contentWindow.document;
-        const isBlank = !doc || !doc.body || doc.body.innerHTML.trim() === '';
-        if (isBlank) {
-          throw new Error('Blank due to frame blocking');
+        if (!doc || !doc.body || doc.body.innerHTML.trim() === '') {
+          throw new Error('Blank');
         }
-      } catch (e) {
-        // Fallback: open in new tab if blocked
+      } catch (err) {
         window.open(url, '_blank');
         iframeContainer.style.display = 'none';
       }
-    };
+    }, 2000); // 2 seconds to check load
 
+    urlFrame.onload = () => clearTimeout(blockedCheck);
     window.scrollTo({ top: 400, behavior: 'smooth' });
   } else {
-    // Handle search query
     iframeContainer.style.display = 'none';
     const googleSearchBox = document.querySelector('.gsc-input input');
     if (googleSearchBox) {
@@ -248,7 +244,6 @@ function handleInput(query) {
   }
 }
 
-// Event Listeners
 document.getElementById('searchBtn').addEventListener('click', () => {
   const query = searchInput.value.trim();
   if(query) handleInput(query);
@@ -261,7 +256,6 @@ searchInput.addEventListener('keypress', e => {
   }
 });
 
-// Result animation observer
 new MutationObserver(() => {
   document.querySelectorAll('.gsc-result').forEach(result => {
     result.style.opacity = '0';
