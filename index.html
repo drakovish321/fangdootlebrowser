@@ -218,6 +218,22 @@ function handleInput(query) {
     iframeContainer.style.display = 'block';
     searchResults.style.display = 'none';
     urlFrame.src = url;
+
+    // Detect if the iframe was blocked (X-Frame-Options / CSP)
+    urlFrame.onload = () => {
+      try {
+        const doc = urlFrame.contentDocument || urlFrame.contentWindow.document;
+        const isBlank = !doc || !doc.body || doc.body.innerHTML.trim() === '';
+        if (isBlank) {
+          throw new Error('Blank due to frame blocking');
+        }
+      } catch (e) {
+        // Fallback: open in new tab if blocked
+        window.open(url, '_blank');
+        iframeContainer.style.display = 'none';
+      }
+    };
+
     window.scrollTo({ top: 400, behavior: 'smooth' });
   } else {
     // Handle search query
